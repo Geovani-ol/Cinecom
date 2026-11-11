@@ -142,17 +142,28 @@ export function Favoritos({
             </span>
           </section>
 
-          <div className="grid-peliculas">
-            {visibles.map((item) => (
-              <Tarjeta
-                key={item.id}
-                contenido={item}
-                favorito
-                onAbrir={onAbrir}
-                onFavorito={onFavorito}
-              />
-            ))}
-          </div>
+          {visibles.length === 0 ? (
+            <div className="vacio vacio--mini">
+              <span className="vacio__icono"><Icono nombre="filtro" size={26} /></span>
+              <h2>No hay {filtroTipo === 'pelicula' ? 'películas' : 'series'} en tu lista</h2>
+              <p>Cambia el filtro o agrega títulos desde el catálogo.</p>
+              <button type="button" className="boton boton--primario" onClick={() => setFiltroTipo('todos')}>
+                Ver todos mis favoritos
+              </button>
+            </div>
+          ) : (
+            <div className="grid-peliculas">
+              {visibles.map((item) => (
+                <Tarjeta
+                  key={item.id}
+                  contenido={item}
+                  favorito
+                  onAbrir={onAbrir}
+                  onFavorito={onFavorito}
+                />
+              ))}
+            </div>
+          )}
 
           {recomendados.length > 0 && (
             <div className="seccion-favoritos">

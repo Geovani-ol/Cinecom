@@ -4458,3 +4458,14 @@ main {
     height: 32px;
   }
 }
+
+.vacio--mini {
+  min-height: 280px;
+  margin-top: 8px;
+}
+
+.vacio--mini .vacio__icono {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 14px;
+}
