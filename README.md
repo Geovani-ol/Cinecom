@@ -142,3 +142,9 @@ La navegación entre Inicio, Catálogo, Favoritos y VIP se hace con un estado `v
 ## Repositorio
 
 [https://github.com/Geovani-ol/Cinecom](https://github.com/Geovani-ol/Cinecom)
+
+## Presentación del proyecto
+
+- [Cinecom-Presentacion.pptx](Cinecom-Presentacion.pptx) — 7 diapositivas para una exposición de 5 minutos, con notas del expositor.
+- [Cinecom-Presentacion.pdf](Cinecom-Presentacion.pdf) — versión PDF para revisión rápida.
+- [Guion de 5 minutos](presentacion/GUION-5-MIN.md) — guion imprimible y checklist para la demo.
