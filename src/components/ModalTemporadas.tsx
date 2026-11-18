@@ -6,11 +6,13 @@ import { unirClases } from '../utils'
 
 type Props = {
   contenido: Contenido
+  suscrito: boolean
   onCerrar: () => void
   onReproducir: (episodio: Episodio, temporada: number) => void
+  onSolicitarVip: () => void
 }
 
-export function ModalTemporadas({ contenido, onCerrar, onReproducir }: Props) {
+export function ModalTemporadas({ contenido, suscrito, onCerrar, onReproducir, onSolicitarVip }: Props) {
   const temporadas = obtenerTemporadas(contenido.slug)
   const [temporadaActiva, setTemporadaActiva] = useState(temporadas[0]?.numero ?? 1)
   const temporada = temporadas.find((item) => item.numero === temporadaActiva) ?? temporadas[0]
@@ -33,7 +35,10 @@ export function ModalTemporadas({ contenido, onCerrar, onReproducir }: Props) {
           <div className="temporadas__hero-info">
             <div className="detalle__badges">
               <span className="badge badge--tipo">Serie</span>
-              <span className="badge badge--calidad"><Icono nombre="corona" size={10} /> VIP activo</span>
+              <span className="badge badge--calidad">
+                <Icono nombre={suscrito ? 'corona' : 'candado'} size={10} />
+                {suscrito ? 'VIP activo' : 'Vista previa'}
+              </span>
               {contenido.calidad.slice(0, 2).map((calidad) => (
                 <span key={calidad} className="badge badge--calidad">{calidad}</span>
               ))}
@@ -65,6 +70,19 @@ export function ModalTemporadas({ contenido, onCerrar, onReproducir }: Props) {
           </aside>
 
           <section className="temporadas__episodios">
+            {!suscrito && (
+              <div className="temporadas__gate">
+                <div>
+                  <Icono nombre="candado" size={15} />
+                  <strong>Vista previa</strong>
+                  <span className="temporadas__gate-punto">·</span>
+                  <span>Activa VIP para reproducir los episodios.</span>
+                </div>
+                <button type="button" className="boton boton--primario" onClick={onSolicitarVip}>
+                  <Icono nombre="corona" size={14} /> Activar VIP
+                </button>
+              </div>
+            )}
             {temporada ? (
               <>
                 <div className="temporadas__cabecera">
@@ -72,22 +90,31 @@ export function ModalTemporadas({ contenido, onCerrar, onReproducir }: Props) {
                     <h3>Temporada {temporada.numero}</h3>
                     <p>{temporada.episodios.length} episodios · {temporada.anio}</p>
                   </div>
-                  <span className="temporadas__vip"><Icono nombre="corona" size={13} /> Incluido en VIP</span>
+                  <span className={`temporadas__vip${suscrito ? '' : ' temporadas__vip--bloqueado'}`}>
+                    <Icono nombre={suscrito ? 'corona' : 'candado'} size={13} />
+                    {suscrito ? 'Incluido en VIP' : 'Solo VIP'}
+                  </span>
                 </div>
                 <div className="episodios">
                   {temporada.episodios.map((episodio) => (
                     <button
                       key={episodio.numero}
                       type="button"
-                      className="episodio"
-                      onClick={() => onReproducir(episodio, temporada.numero)}
+                      className={`episodio${suscrito ? '' : ' episodio--bloqueado'}`}
+                      onClick={() => (suscrito ? onReproducir(episodio, temporada.numero) : onSolicitarVip())}
+                      aria-label={suscrito
+                        ? `Reproducir ${episodio.titulo}`
+                        : `Activar VIP para reproducir ${episodio.titulo}`}
                     >
                       <span className="episodio__numero">{String(episodio.numero).padStart(2, '0')}</span>
                       <span className="episodio__datos">
                         <strong>{episodio.titulo}</strong>
                         <small>{episodio.duracion} min · {episodio.anio}</small>
                       </span>
-                      <span className="episodio__accion"><Icono nombre="play" size={14} relleno /> Reproducir</span>
+                      <span className="episodio__accion">
+                        <Icono nombre={suscrito ? 'play' : 'candado'} size={14} relleno={suscrito} />
+                        {suscrito ? 'Reproducir' : 'Solo VIP'}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -102,7 +129,12 @@ export function ModalTemporadas({ contenido, onCerrar, onReproducir }: Props) {
         </div>
 
         <footer className="temporadas__pie">
-          <span><Icono nombre="info" size={13} /> Elige un episodio para verlo en el reproductor de demostración.</span>
+          <span>
+            <Icono nombre="info" size={13} />
+            {suscrito
+              ? 'Elige un episodio para verlo en el reproductor de demostración.'
+              : 'Puedes explorar temporadas y episodios; activa VIP para reproducirlos.'}
+          </span>
           <span className="temporadas__demo">Sin cobros reales · modo demo</span>
         </footer>
       </article>

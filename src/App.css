@@ -4917,3 +4917,89 @@ main {
     display: none !important;
   }
 }
+
+/* Vista previa de series sin VIP: se ven temporadas y episodios, pero no se reproducen. */
+.temporadas__gate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 11px;
+  padding: 9px 11px;
+  border: 1px solid rgba(245, 165, 36, 0.26);
+  border-radius: 9px;
+  background: rgba(245, 165, 36, 0.075);
+}
+
+.temporadas__gate > div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  color: #ddc48b;
+  font-size: 8.5px;
+}
+
+.temporadas__gate svg {
+  color: #f8c567;
+  flex: 0 0 auto;
+}
+
+.temporadas__gate strong {
+  color: #f8c567;
+  font-size: 9.5px;
+}
+
+.temporadas__gate .boton {
+  min-height: 30px;
+  padding: 6px 10px;
+  font-size: 8.5px;
+}
+
+.temporadas__vip--bloqueado {
+  border-color: rgba(245, 165, 36, 0.28);
+  background: rgba(245, 165, 36, 0.08);
+  color: #f8c567;
+}
+
+.episodio--bloqueado:hover {
+  border-color: rgba(245, 165, 36, 0.35);
+  background: rgba(245, 165, 36, 0.065);
+}
+
+.episodio--bloqueado .episodio__numero {
+  color: #b7a26f;
+}
+
+.episodio--bloqueado:hover .episodio__numero {
+  border-color: rgba(245, 165, 36, 0.35);
+  color: #f8c567;
+}
+
+.episodio--bloqueado .episodio__accion {
+  border-color: rgba(245, 165, 36, 0.28);
+  background: rgba(245, 165, 36, 0.08);
+  color: #f8c567;
+  opacity: 0.9;
+}
+
+.episodio--bloqueado:hover .episodio__accion {
+  background: rgba(245, 165, 36, 0.15);
+}
+
+@media (max-width: 760px) {
+  .temporadas__gate {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .temporadas__gate .boton {
+    width: 100%;
+  }
+}
+
+.temporadas__gate-punto {
+  color: #8f7d51;
+  font-weight: 700;
+}

@@ -175,24 +175,34 @@ function App() {
   }
 
   const verContenido = (contenido: Contenido) => {
+    // Las series siempre abren su vista de temporadas, incluso sin VIP.
+    // Dentro del selector se muestra la vista previa y se bloquea la reproducción.
+    if (contenido.tipo === 'serie') {
+      setSelectorSerie(contenido)
+      return
+    }
+
     if (!suscripcion) {
       setSeleccionada(null)
       setPendiente(contenido)
       setVista('suscripcion')
-      setMensaje(contenido.tipo === 'serie'
-        ? 'Activa tu plan VIP para ver la serie completa'
-        : 'Activa tu plan VIP para ver la película completa')
-      return
-    }
-
-    if (contenido.tipo === 'serie') {
-      setSelectorSerie(contenido)
+      setMensaje('Activa tu plan VIP para ver la película completa')
       return
     }
 
     setSeleccionada(null)
     setEpisodioActual(null)
     setReproductor(contenido)
+  }
+
+  const solicitarVipSerie = () => {
+    if (!selectorSerie) return
+    const contenido = selectorSerie
+    setSelectorSerie(null)
+    setSeleccionada(null)
+    setPendiente(contenido)
+    setVista('suscripcion')
+    setMensaje('Activa tu plan VIP para reproducir los episodios')
   }
 
   const reproducirEpisodio = (episodio: Episodio, temporada: number) => {
@@ -342,8 +352,10 @@ function App() {
         <ModalTemporadas
           key={selectorSerie.id}
           contenido={selectorSerie}
+          suscrito={Boolean(suscripcion)}
           onCerrar={() => setSelectorSerie(null)}
           onReproducir={reproducirEpisodio}
+          onSolicitarVip={solicitarVipSerie}
         />
       )}
 

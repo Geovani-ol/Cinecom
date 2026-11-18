@@ -54,7 +54,7 @@ npm run build
 - **Búsqueda por título** tolerante a mayúsculas y acentos.
 - **Filtros** por tipo (película/serie) y por género, además de ordenamiento por destacados, puntuación, año o A–Z.
 - **Ficha de detalle** con sinopsis, reparto (fotos y personajes), ficha técnica, calidad y títulos similares.
-- **Series por temporadas y episodios**: al entrar con VIP se muestra el selector de temporadas, los episodios con su duración y el reproductor por episodio.
+- **Series por temporadas y episodios**: el selector de temporadas siempre se puede abrir; sin VIP se muestra en modo vista previa con los episodios bloqueados, y con VIP se reproducen por episodio.
 - **Favoritos**: se marcan y desmarcan desde cualquier tarjeta o desde el detalle. La sección “Mis favoritos” muestra estadísticas, filtros y recomendaciones.
 - **Tráilers locales**: cada título reproduce su tráiler descargado en formato MP4 dentro de un reproductor modal.
 - **Suscripción VIP simulada**: tres planes, formulario de pago con validación y activación inmediata. Los planes habilitan el reproductor de “película completa” simulado.
@@ -74,6 +74,10 @@ npm run build
 ### Series con temporadas y episodios
 
 ![Selector de temporadas y episodios](docs/preview-temporadas.jpg)
+
+Sin VIP el selector se abre en modo vista previa: se ven temporadas y episodios, pero las filas muestran un candado y no reproducen contenido.
+
+![Vista previa de episodios sin VIP](docs/preview-temporadas-bloqueada.jpg)
 
 ## Estructura del proyecto
 
@@ -135,10 +139,11 @@ La navegación entre Inicio, Catálogo, Favoritos y VIP se hace con un estado `v
 2. Abre una tarjeta y revisa sus pestañas **Sinopsis**, **Reparto** y **Títulos similares**.
 3. Pulsa **Ver tráiler** para reproducir el MP4 local.
 4. Marca títulos con el corazón y revisa **Mis favoritos**.
-5. Pulsa **Ver con VIP** sin suscripción: te llevará a la página de planes.
-6. Elige un plan, usa la tarjeta de prueba `4242 4242 4242 4242`, vencimiento `12/30` y CVV `123`.
-7. Al confirmar, el plan queda activo. Abre una serie: verás **Temporadas y episodios**; elige una temporada y un episodio para reproducirlo.
-8. Recarga la página: los favoritos y la suscripción deben mantenerse.
+5. Abre una serie: verás **Temporadas y episodios** en modo vista previa; los episodios tienen candado y no se reproducen.
+6. Pulsa **Activar VIP** desde el selector (o **Ver con VIP** desde una película): te llevará a la página de planes.
+7. Elige un plan, usa la tarjeta de prueba `4242 4242 4242 4242`, vencimiento `12/30` y CVV `123`.
+8. Al confirmar, el plan queda activo; vuelve a la serie y elige una temporada y un episodio para reproducirlo.
+9. Recarga la página: los favoritos y la suscripción deben mantenerse.
 
 ## Recursos y aviso académico
 

@@ -264,7 +264,9 @@ export function ModalDetalle({
                   ? (esSerie
                     ? 'Elige la temporada y el episodio que quieres ver.'
                     : 'Puedes reproducir esta película completa en calidad 4K sin anuncios.')
-                  : 'Reproduce películas y series completas, sin anuncios y en la mejor calidad.'}
+                  : (esSerie
+                    ? 'Explora las temporadas y episodios. Activa VIP para reproducirlos.'
+                    : 'Reproduce películas completas, sin anuncios y en la mejor calidad.')}
               </p>
               {!suscrito && (
                 <div className="panel-vip__precio">
@@ -272,10 +274,14 @@ export function ModalDetalle({
                 </div>
               )}
               <button type="button" className="boton boton--primario boton--bloque" onClick={() => onVerContenido(contenido)}>
-                <Icono nombre={suscrito ? (esSerie ? 'filme' : 'play') : 'corona'} size={16} relleno={suscrito && !esSerie} />
+                <Icono
+                  nombre={esSerie ? (suscrito ? 'filme' : 'candado') : (suscrito ? 'play' : 'corona')}
+                  size={16}
+                  relleno={suscrito && !esSerie}
+                />
                 {suscrito
                   ? (esSerie ? 'Ver temporadas y episodios' : 'Reproducir ahora')
-                  : 'Activar VIP y ver'}
+                  : (esSerie ? 'Ver temporadas y episodios' : 'Activar VIP y ver')}
               </button>
               <span className="panel-vip__nota">Suscripción simulada para esta demostración.</span>
             </div>
