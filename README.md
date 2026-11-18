@@ -63,12 +63,12 @@ npm run build
 - **Diseño responsive** para escritorio, tablet y móvil, con menú móvil y buscador adaptado.
 - **Accesibilidad básica**: navegación por teclado, cierre con `Escape`, etiquetas ARIA, foco visible y respeto a `prefers-reduced-motion`.
 
-| Catálogo | Ficha de detalle |
-| --- | --- |
+| Catálogo                                          | Ficha de detalle                              |
+| ------------------------------------------------- | --------------------------------------------- |
 | ![Catálogo de Cinecom](docs/preview-catalogo.jpg) | ![Ficha de detalle](docs/preview-detalle.jpg) |
 
-| Suscripción VIP | Reproductor simulado |
-| --- | --- |
+| Suscripción VIP                     | Reproductor simulado                                                                   |
+| ----------------------------------- | -------------------------------------------------------------------------------------- |
 | ![Planes VIP](docs/preview-vip.jpg) | La reproducción completa es simulada y se identifica con el aviso “Modo demostración”. |
 
 ### Series con temporadas y episodios
@@ -151,13 +151,3 @@ La navegación entre Inicio, Catálogo, Favoritos y VIP se hace con un estado `v
 - Tráilers: videos de YouTube descargados en baja resolución para que funcionen sin conexión durante la presentación.
 - Los derechos de las películas, series, pósters y tráilers pertenecen a sus respectivos distribuidores.
 - **Cinecom no es un servicio real de streaming.** El pago y la reproducción VIP son simulaciones académicas; no se realizan cobros ni se distribuye contenido completo.
-
-## Repositorio
-
-[https://github.com/Geovani-ol/Cinecom](https://github.com/Geovani-ol/Cinecom)
-
-## Presentación del proyecto
-
-- [Cinecom-Presentacion.pptx](Cinecom-Presentacion.pptx) — 7 diapositivas para una exposición de 5 minutos, con notas del expositor.
-- [Cinecom-Presentacion.pdf](Cinecom-Presentacion.pdf) — versión PDF para revisión rápida.
-- [Guion de 5 minutos](presentacion/GUION-5-MIN.md) — guion imprimible y checklist para la demo.
