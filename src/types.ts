@@ -1,3 +1,5 @@
+import type { Episodio } from './data/episodios'
+
 export type Vista = 'inicio' | 'catalogo' | 'favoritos' | 'suscripcion'
 
 export type FiltroTipo = 'todos' | 'pelicula' | 'serie'
@@ -15,4 +17,8 @@ export type Plan = {
   nombre: string
   precio: number
   periodo: string
+}
+export type EpisodioEnReproduccion = {
+  temporada: number
+  episodio: Episodio
 }

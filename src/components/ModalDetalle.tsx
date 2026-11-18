@@ -13,7 +13,7 @@ type Props = {
   onCerrar: () => void
   onFavorito: (contenido: Contenido) => void
   onTrailer: (contenido: Contenido) => void
-  onVerPelicula: (contenido: Contenido) => void
+  onVerContenido: (contenido: Contenido) => void
   onCompartir: (contenido: Contenido) => void
   onSeleccionar: (contenido: Contenido) => void
 }
@@ -26,13 +26,14 @@ export function ModalDetalle({
   onCerrar,
   onFavorito,
   onTrailer,
-  onVerPelicula,
+  onVerContenido,
   onCompartir,
   onSeleccionar,
 }: Props) {
   const [pestana, setPestana] = useState<Pestana>('sinopsis')
 
   const tipo = idiomaTipo(contenido)
+  const esSerie = contenido.tipo === 'serie'
   const cabecera = `detalle-${contenido.id}`
   const coincidencia = Math.min(99, Math.round(88 + contenido.puntuacion * 1.1))
 
@@ -86,9 +87,9 @@ export function ModalDetalle({
               <button type="button" className="boton boton--primario" onClick={() => onTrailer(contenido)}>
                 <Icono nombre="play" size={17} relleno /> Ver tráiler
               </button>
-              <button type="button" className="boton boton--vip" onClick={() => onVerPelicula(contenido)}>
+              <button type="button" className="boton boton--vip" onClick={() => onVerContenido(contenido)}>
                 {suscrito ? <Icono nombre="play" size={16} relleno /> : <Icono nombre="candado" size={16} />}
-                {suscrito ? 'Ver película' : 'Ver con VIP'}
+                {esSerie ? 'Ver serie' : (suscrito ? 'Ver película' : 'Ver con VIP')}
               </button>
               <button
                 type="button"
@@ -220,11 +221,17 @@ export function ModalDetalle({
                 <span className="ficha__clave">Duración</span>
                 <span className="ficha__valor">{contenido.duracion}</span>
               </div>
-              {contenido.tipo === 'serie' && (
-                <div className="ficha__fila">
-                  <span className="ficha__clave">Episodios</span>
-                  <span className="ficha__valor">{contenido.episodios}</span>
-                </div>
+              {esSerie && (
+                <>
+                  <div className="ficha__fila">
+                    <span className="ficha__clave">Temporadas</span>
+                    <span className="ficha__valor">{contenido.temporadas}</span>
+                  </div>
+                  <div className="ficha__fila">
+                    <span className="ficha__clave">Episodios</span>
+                    <span className="ficha__valor">{contenido.episodios}</span>
+                  </div>
+                </>
               )}
               <div className="ficha__fila">
                 <span className="ficha__clave">Clasificación</span>
@@ -254,17 +261,21 @@ export function ModalDetalle({
               <h3>{suscrito ? 'Tu plan VIP está activo' : 'Incluido con Cinecom VIP'}</h3>
               <p>
                 {suscrito
-                  ? 'Puedes reproducir este título completo en calidad 4K sin anuncios.'
-                  : 'Reproduce películas completas, sin anuncios y en la mejor calidad.'}
+                  ? (esSerie
+                    ? 'Elige la temporada y el episodio que quieres ver.'
+                    : 'Puedes reproducir esta película completa en calidad 4K sin anuncios.')
+                  : 'Reproduce películas y series completas, sin anuncios y en la mejor calidad.'}
               </p>
               {!suscrito && (
                 <div className="panel-vip__precio">
                   <strong>$9.99</strong> <span>USD / mes</span>
                 </div>
               )}
-              <button type="button" className="boton boton--primario boton--bloque" onClick={() => onVerPelicula(contenido)}>
-                <Icono nombre={suscrito ? 'play' : 'corona'} size={16} relleno={suscrito} />
-                {suscrito ? 'Reproducir ahora' : 'Activar VIP y ver'}
+              <button type="button" className="boton boton--primario boton--bloque" onClick={() => onVerContenido(contenido)}>
+                <Icono nombre={suscrito ? (esSerie ? 'filme' : 'play') : 'corona'} size={16} relleno={suscrito && !esSerie} />
+                {suscrito
+                  ? (esSerie ? 'Ver temporadas y episodios' : 'Reproducir ahora')
+                  : 'Activar VIP y ver'}
               </button>
               <span className="panel-vip__nota">Suscripción simulada para esta demostración.</span>
             </div>

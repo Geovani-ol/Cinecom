@@ -54,6 +54,7 @@ npm run build
 - **Búsqueda por título** tolerante a mayúsculas y acentos.
 - **Filtros** por tipo (película/serie) y por género, además de ordenamiento por destacados, puntuación, año o A–Z.
 - **Ficha de detalle** con sinopsis, reparto (fotos y personajes), ficha técnica, calidad y títulos similares.
+- **Series por temporadas y episodios**: al entrar con VIP se muestra el selector de temporadas, los episodios con su duración y el reproductor por episodio.
 - **Favoritos**: se marcan y desmarcan desde cualquier tarjeta o desde el detalle. La sección “Mis favoritos” muestra estadísticas, filtros y recomendaciones.
 - **Tráilers locales**: cada título reproduce su tráiler descargado en formato MP4 dentro de un reproductor modal.
 - **Suscripción VIP simulada**: tres planes, formulario de pago con validación y activación inmediata. Los planes habilitan el reproductor de “película completa” simulado.
@@ -69,6 +70,10 @@ npm run build
 | Suscripción VIP | Reproductor simulado |
 | --- | --- |
 | ![Planes VIP](docs/preview-vip.jpg) | La reproducción completa es simulada y se identifica con el aviso “Modo demostración”. |
+
+### Series con temporadas y episodios
+
+![Selector de temporadas y episodios](docs/preview-temporadas.jpg)
 
 ## Estructura del proyecto
 
@@ -87,6 +92,7 @@ Cinecom/
 │   │   ├── Tarjeta.tsx       # Tarjeta reutilizable de película/serie
 │   │   ├── FilaContenido.tsx # Carrusel horizontal con flechas
 │   │   ├── ModalDetalle.tsx  # Ficha completa con pestañas
+│   │   ├── ModalTemporadas.tsx # Selector de temporadas y episodios
 │   │   ├── ModalTrailer.tsx  # Reproductor del tráiler
 │   │   ├── Reproductor.tsx   # Reproductor VIP simulado
 │   │   ├── Toast.tsx         # Notificaciones breves
@@ -98,7 +104,8 @@ Cinecom/
 │   │   ├── Favoritos.tsx     # Colección personal y estado vacío
 │   │   └── Suscripcion.tsx   # Planes, pago simulado y preguntas frecuentes
 │   ├── data/
-│   │   └── peliculas.ts      # Arreglo CATALOGO y tipos Contenido/Reparto
+│   │   ├── peliculas.ts      # Arreglo CATALOGO y tipos Contenido/Reparto
+│   │   └── episodios.ts      # Temporadas y 175 episodios de las 6 series
 │   ├── App.tsx               # Estado principal y navegación entre vistas
 │   ├── types.ts              # Tipos de vista, filtros, planes y suscripción
 │   ├── utils.ts              # Búsqueda, fechas, duración y formateadores
@@ -111,13 +118,14 @@ Cinecom/
 
 ## Cómo se comunican los componentes
 
-`App.tsx` concentra el estado principal: vista actual, búsqueda, filtros, favoritos, suscripción y modales abiertos. Ese estado se pasa a las páginas y componentes mediante **props** y funciones de retorno (`onAbrir`, `onFavorito`, `onTrailer`, `onVerPelicula`). Así se evita introducir una librería de estado externa y se mantiene un nivel intermedio de complejidad.
+`App.tsx` concentra el estado principal: vista actual, búsqueda, filtros, favoritos, suscripción y modales abiertos. Ese estado se pasa a las páginas y componentes mediante **props** y funciones de retorno (`onAbrir`, `onFavorito`, `onTrailer`, `onVerContenido`). Así se evita introducir una librería de estado externa y se mantiene un nivel intermedio de complejidad.
 
 - **Catálogo** se define en `src/data/peliculas.ts` con el tipo `Contenido`.
 - **Tarjeta** recibe un objeto `Contenido` y avisa cuando se abre o cuando cambia su corazón.
 - **ModalDetalle** recibe el título seleccionado, sus similares y el estado de favorito/suscripción.
+- **ModalTemporadas** recibe una serie y muestra sus temporadas y episodios; al elegir uno llama a `onReproducir(episodio, temporada)`.
 - **Suscripcion** maneja localmente el plan elegido, los campos del pago y los errores de validación. Al confirmar, llama a `onSuscribir(plan)` y `App` guarda la membresía.
-- **Reproductor** recibe el título y la suscripción activa; calcula una duración aproximada y simula el avance con `setInterval`.
+- **Reproductor** recibe el título, la suscripción y, si es una serie, el episodio elegido; calcula la duración del episodio y simula el avance con `setInterval`.
 
 La navegación entre Inicio, Catálogo, Favoritos y VIP se hace con un estado `vista` en `App`, sin React Router. Es una decisión intencional para mantener el proyecto en un nivel intermedio y concentrar el aprendizaje en componentes, props, estado y eventos.
 
@@ -129,7 +137,7 @@ La navegación entre Inicio, Catálogo, Favoritos y VIP se hace con un estado `v
 4. Marca títulos con el corazón y revisa **Mis favoritos**.
 5. Pulsa **Ver con VIP** sin suscripción: te llevará a la página de planes.
 6. Elige un plan, usa la tarjeta de prueba `4242 4242 4242 4242`, vencimiento `12/30` y CVV `123`.
-7. Al confirmar, el plan queda activo y aparece el botón para ver la película completa simulada.
+7. Al confirmar, el plan queda activo. Abre una serie: verás **Temporadas y episodios**; elige una temporada y un episodio para reproducirlo.
 8. Recarga la página: los favoritos y la suscripción deben mantenerse.
 
 ## Recursos y aviso académico

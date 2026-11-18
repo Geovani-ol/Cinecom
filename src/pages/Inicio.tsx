@@ -11,7 +11,7 @@ type Props = {
   onAbrir: (contenido: Contenido) => void
   onFavorito: (contenido: Contenido) => void
   onTrailer: (contenido: Contenido) => void
-  onVerPelicula: (contenido: Contenido) => void
+  onVerContenido: (contenido: Contenido) => void
   onAbrirCatalogo: (tipo?: FiltroTipo) => void
   onGenero: (genero: string) => void
   onVip: () => void
@@ -31,7 +31,7 @@ export function Inicio({
   onAbrir,
   onFavorito,
   onTrailer,
-  onVerPelicula,
+  onVerContenido,
   onAbrirCatalogo,
   onGenero,
   onVip,
@@ -89,9 +89,9 @@ export function Inicio({
             <button type="button" className="boton boton--primario" onClick={() => onTrailer(hero)}>
               <Icono nombre="play" size={18} relleno /> Ver tráiler
             </button>
-            <button type="button" className="boton boton--cristal" onClick={() => onVerPelicula(hero)}>
+            <button type="button" className="boton boton--cristal" onClick={() => onVerContenido(hero)}>
               {suscripcion ? <Icono nombre="play" size={17} relleno /> : <Icono nombre="candado" size={17} />}
-              {suscripcion ? 'Ver película' : 'Ver con VIP'}
+              {hero.tipo === 'serie' ? 'Ver serie' : (suscripcion ? 'Ver película' : 'Ver con VIP')}
             </button>
             <button
               type="button"

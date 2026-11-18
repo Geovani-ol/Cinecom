@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { CATALOGO, type Contenido } from './data/peliculas'
-import type { FiltroTipo, Orden, Plan, Suscripcion, Vista } from './types'
+import type { EpisodioEnReproduccion, FiltroTipo, Orden, Plan, Suscripcion, Vista } from './types'
+import type { Episodio } from './data/episodios'
 import { Navbar } from './components/Navbar'
 import { Footer } from './components/Footer'
 import { ModalDetalle } from './components/ModalDetalle'
 import { ModalTrailer } from './components/ModalTrailer'
+import { ModalTemporadas } from './components/ModalTemporadas'
 import { Reproductor } from './components/Reproductor'
 import { Toast } from './components/Toast'
 import { Inicio } from './pages/Inicio'
@@ -42,12 +44,14 @@ function App() {
   const [suscripcion, setSuscripcion] = useState<Suscripcion | null>(leerSuscripcion)
   const [seleccionada, setSeleccionada] = useState<Contenido | null>(null)
   const [trailer, setTrailer] = useState<Contenido | null>(null)
+  const [selectorSerie, setSelectorSerie] = useState<Contenido | null>(null)
   const [reproductor, setReproductor] = useState<Contenido | null>(null)
+  const [episodioActual, setEpisodioActual] = useState<EpisodioEnReproduccion | null>(null)
   const [pendiente, setPendiente] = useState<Contenido | null>(null)
   const [mensaje, setMensaje] = useState('')
   const [menuAbierto, setMenuAbierto] = useState(false)
 
-  const hayOverlay = Boolean(seleccionada || trailer || reproductor)
+  const hayOverlay = Boolean(seleccionada || trailer || selectorSerie || reproductor)
 
   useEffect(() => {
     try {
@@ -86,13 +90,16 @@ function App() {
     const alPresionar = (event: KeyboardEvent) => {
       if (event.key !== 'Escape') return
       if (trailer) setTrailer(null)
-      else if (reproductor) setReproductor(null)
+      else if (reproductor) {
+        setReproductor(null)
+        setEpisodioActual(null)
+      } else if (selectorSerie) setSelectorSerie(null)
       else if (seleccionada) setSeleccionada(null)
       else if (menuAbierto) setMenuAbierto(false)
     }
     document.addEventListener('keydown', alPresionar)
     return () => document.removeEventListener('keydown', alPresionar)
-  }, [trailer, reproductor, seleccionada, menuAbierto])
+  }, [trailer, reproductor, selectorSerie, seleccionada, menuAbierto])
 
   const navegar = (nuevaVista: Vista) => {
     if (nuevaVista !== 'suscripcion') setPendiente(null)
@@ -167,16 +174,31 @@ function App() {
     setMensaje('Comparte Cinecom con tus amigos')
   }
 
-  const verPelicula = (contenido: Contenido) => {
-    if (suscripcion) {
+  const verContenido = (contenido: Contenido) => {
+    if (!suscripcion) {
       setSeleccionada(null)
-      setReproductor(contenido)
+      setPendiente(contenido)
+      setVista('suscripcion')
+      setMensaje(contenido.tipo === 'serie'
+        ? 'Activa tu plan VIP para ver la serie completa'
+        : 'Activa tu plan VIP para ver la película completa')
       return
     }
+
+    if (contenido.tipo === 'serie') {
+      setSelectorSerie(contenido)
+      return
+    }
+
     setSeleccionada(null)
-    setPendiente(contenido)
-    setVista('suscripcion')
-    setMensaje('Activa tu plan VIP para ver la película completa')
+    setEpisodioActual(null)
+    setReproductor(contenido)
+  }
+
+  const reproducirEpisodio = (episodio: Episodio, temporada: number) => {
+    if (!selectorSerie) return
+    setEpisodioActual({ temporada, episodio })
+    setReproductor(selectorSerie)
   }
 
   const activarPlan = (plan: Plan) => {
@@ -187,7 +209,7 @@ function App() {
       fecha: new Date().toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }),
     }
     setSuscripcion(nueva)
-    setMensaje('¡Suscripción VIP activada! Ya puedes ver películas completas')
+    setMensaje('¡Suscripción VIP activada! Ya puedes ver películas y series completas')
   }
 
   const cancelarSuscripcion = () => {
@@ -197,12 +219,21 @@ function App() {
   }
 
   const verPendiente = () => {
-    if (pendiente) {
-      setReproductor(pendiente)
-      setPendiente(null)
-      setVista('inicio')
-    } else {
+    if (!pendiente) {
       navegar('inicio')
+      return
+    }
+
+    const contenido = pendiente
+    setPendiente(null)
+    setVista('inicio')
+
+    if (contenido.tipo === 'serie') {
+      setSeleccionada(contenido)
+      setSelectorSerie(contenido)
+    } else {
+      setEpisodioActual(null)
+      setReproductor(contenido)
     }
   }
 
@@ -238,7 +269,7 @@ function App() {
             onAbrir={setSeleccionada}
             onFavorito={alternarFavorito}
             onTrailer={setTrailer}
-            onVerPelicula={verPelicula}
+            onVerContenido={verContenido}
             onAbrirCatalogo={abrirCatalogo}
             onGenero={filtrarPorGenero}
             onVip={() => navegar('suscripcion')}
@@ -301,9 +332,18 @@ function App() {
           onCerrar={() => setSeleccionada(null)}
           onFavorito={alternarFavorito}
           onTrailer={setTrailer}
-          onVerPelicula={verPelicula}
+          onVerContenido={verContenido}
           onCompartir={compartir}
           onSeleccionar={setSeleccionada}
+        />
+      )}
+
+      {selectorSerie && (
+        <ModalTemporadas
+          key={selectorSerie.id}
+          contenido={selectorSerie}
+          onCerrar={() => setSelectorSerie(null)}
+          onReproducir={reproducirEpisodio}
         />
       )}
 
@@ -311,10 +351,16 @@ function App() {
 
       {reproductor && suscripcion && (
         <Reproductor
-          key={reproductor.id}
+          key={episodioActual
+            ? `${reproductor.id}-${episodioActual.temporada}-${episodioActual.episodio.numero}`
+            : reproductor.id}
           contenido={reproductor}
           suscripcion={suscripcion}
-          onCerrar={() => setReproductor(null)}
+          episodio={episodioActual}
+          onCerrar={() => {
+            setReproductor(null)
+            setEpisodioActual(null)
+          }}
         />
       )}
 

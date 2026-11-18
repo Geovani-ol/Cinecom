@@ -158,7 +158,10 @@ export function Suscripcion({
           <div className="vip-activa__acciones">
             {contenidoPendiente && (
               <button type="button" className="boton boton--primario" onClick={onVerPendiente}>
-                <Icono nombre="play" size={17} relleno /> Ver {contenidoPendiente.titulo}
+                <Icono nombre={contenidoPendiente.tipo === 'serie' ? 'filme' : 'play'} size={17} relleno={contenidoPendiente.tipo !== 'serie'} />
+                {contenidoPendiente.tipo === 'serie'
+                  ? 'Ver temporadas y episodios'
+                  : `Ver ${contenidoPendiente.titulo}`}
               </button>
             )}
             <button type="button" className="boton boton--cristal" onClick={onAbrirCatalogo}>

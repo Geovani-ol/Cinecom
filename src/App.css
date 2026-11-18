@@ -4469,3 +4469,451 @@ main {
   height: 56px;
   margin-bottom: 14px;
 }
+
+/* ===== Temporadas y episodios (series VIP) ===== */
+
+.overlay--temporadas {
+  z-index: 95;
+  align-items: center;
+}
+
+.temporadas {
+  display: flex;
+  flex-direction: column;
+  width: min(1040px, 100%);
+  max-height: calc(100vh - 56px);
+  overflow: hidden;
+  border: 1px solid var(--borde-fuerte);
+  border-radius: 22px;
+  background: var(--fondo-2);
+  box-shadow: 0 40px 110px rgba(0, 0, 0, 0.64);
+  animation: subir 0.32s cubic-bezier(0.2, 0.75, 0.2, 1);
+}
+
+.temporadas__hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 188px;
+  padding: 0;
+  overflow: hidden;
+  background-position: center 28%;
+  background-size: cover;
+  isolation: isolate;
+}
+
+.temporadas__hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(6, 7, 14, 0.96) 0%, rgba(6, 7, 14, 0.74) 55%, rgba(6, 7, 14, 0.18) 100%),
+    linear-gradient(0deg, var(--fondo-2) 0%, rgba(13, 16, 32, 0.25) 72%, rgba(6, 7, 14, 0.12) 100%);
+}
+
+.temporadas__hero-velo {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(6, 7, 14, 0.4), transparent 60%);
+}
+
+.temporadas__hero .detalle__cerrar {
+  top: 14px;
+  right: 14px;
+}
+
+.temporadas__hero-info {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 48px 30px 20px;
+}
+
+.temporadas__hero-info .badge {
+  gap: 4px;
+}
+
+.temporadas__hero-info .badge svg {
+  margin-right: 2px;
+}
+
+.temporadas__titulo {
+  font-family: var(--display);
+  font-size: clamp(30px, 4vw, 42px);
+  font-weight: 550;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+
+.temporadas__subtitulo {
+  margin-top: 8px;
+  color: #bbbac9;
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.temporadas__cuerpo {
+  display: grid;
+  grid-template-columns: 224px minmax(0, 1fr);
+  min-height: 0;
+  flex: 1;
+}
+
+.temporadas__menu {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 18px 13px;
+  border-right: 1px solid var(--borde);
+  background: rgba(5, 7, 14, 0.26);
+}
+
+.temporadas__menu .seccion__eyebrow {
+  margin: 2px 7px 9px;
+  font-size: 8px;
+}
+
+.temporada-btn {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 9px 8px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--texto-suave);
+  text-align: left;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.temporada-btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--texto);
+}
+
+.temporada-btn--activo {
+  border-color: rgba(225, 29, 72, 0.38);
+  background: rgba(225, 29, 72, 0.12);
+  color: #fff;
+}
+
+.temporada-btn__numero {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  border: 1px solid var(--borde);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--texto-tenue);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.temporada-btn--activo .temporada-btn__numero {
+  border-color: rgba(225, 29, 72, 0.45);
+  background: var(--primario);
+  color: #fff;
+}
+
+.temporada-btn__datos {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+
+.temporada-btn__datos strong {
+  overflow: hidden;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.temporada-btn__datos small {
+  color: var(--texto-tenue);
+  font-size: 8px;
+  font-weight: 500;
+}
+
+.temporadas__episodios {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 17px 19px 12px;
+}
+
+.temporadas__cabecera {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 12px;
+}
+
+.temporadas__cabecera h3 {
+  color: #f2f1f7;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.temporadas__cabecera p {
+  margin-top: 3px;
+  color: var(--texto-tenue);
+  font-size: 8.5px;
+}
+
+.temporadas__vip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: 0 0 auto;
+  padding: 5px 8px;
+  border: 1px solid rgba(245, 165, 36, 0.28);
+  border-radius: 999px;
+  background: rgba(245, 165, 36, 0.08);
+  color: #f8c567;
+  font-size: 7.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.episodios {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.episodio {
+  display: grid;
+  grid-template-columns: 35px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 9px;
+  border: 1px solid var(--borde);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.018);
+  color: var(--texto);
+  text-align: left;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.episodio:hover {
+  border-color: rgba(225, 29, 72, 0.36);
+  background: rgba(225, 29, 72, 0.065);
+  transform: translateX(2px);
+}
+
+.episodio__numero {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--borde);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--texto-tenue);
+  font-size: 9px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.episodio:hover .episodio__numero {
+  border-color: rgba(225, 29, 72, 0.4);
+  color: var(--primario-claro);
+}
+
+.episodio__datos {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+
+.episodio__datos strong {
+  overflow: hidden;
+  color: #e8e7ef;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.episodio__datos small {
+  color: var(--texto-tenue);
+  font-size: 8px;
+}
+
+.episodio__accion {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  border: 1px solid rgba(225, 29, 72, 0.25);
+  border-radius: 999px;
+  background: rgba(225, 29, 72, 0.08);
+  color: var(--primario-claro);
+  font-size: 7.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0.72;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.episodio:hover .episodio__accion {
+  opacity: 1;
+  background: rgba(225, 29, 72, 0.16);
+}
+
+.temporadas__pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 19px;
+  border-top: 1px solid var(--borde);
+  background: rgba(5, 7, 14, 0.28);
+  color: var(--texto-tenue);
+  font-size: 8px;
+}
+
+.temporadas__pie span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.temporadas__demo {
+  flex: 0 0 auto;
+  color: #66697e;
+}
+
+.temporadas__vacio {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 220px;
+  color: var(--texto-tenue);
+  text-align: center;
+}
+
+.temporadas__vacio p {
+  max-width: 320px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+@media (max-width: 760px) {
+  .overlay--temporadas {
+    padding: 8px;
+  }
+
+  .temporadas {
+    max-height: calc(100vh - 16px);
+    border-radius: 16px;
+  }
+
+  .temporadas__hero {
+    min-height: 155px;
+  }
+
+  .temporadas__hero-info {
+    padding: 42px 18px 15px;
+  }
+
+  .temporadas__titulo {
+    font-size: 30px;
+  }
+
+  .temporadas__cuerpo {
+    grid-template-columns: 1fr;
+  }
+
+  .temporadas__menu {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px 12px;
+    border-right: 0;
+    border-bottom: 1px solid var(--borde);
+    scrollbar-width: none;
+  }
+
+  .temporadas__menu::-webkit-scrollbar {
+    display: none;
+  }
+
+  .temporadas__menu .seccion__eyebrow {
+    display: none;
+  }
+
+  .temporada-btn {
+    width: auto;
+    flex: 0 0 auto;
+    padding: 7px;
+  }
+
+  .temporada-btn__datos small {
+    display: none;
+  }
+
+  .temporadas__episodios {
+    padding: 13px 12px 10px;
+  }
+
+  .temporadas__cabecera h3 {
+    font-size: 15px;
+  }
+
+  .temporadas__vip {
+    font-size: 7px;
+  }
+
+  .episodio {
+    grid-template-columns: 30px minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 7px;
+  }
+
+  .episodio__numero {
+    width: 27px;
+    height: 27px;
+  }
+
+  .episodio__accion {
+    font-size: 0;
+    padding: 6px;
+  }
+
+  .episodio__accion svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .temporadas__pie {
+    padding: 9px 12px;
+    font-size: 7.5px;
+  }
+
+  .temporadas__demo {
+    display: none !important;
+  }
+}

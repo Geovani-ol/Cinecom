@@ -1,17 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Contenido } from '../data/peliculas'
-import type { Suscripcion } from '../types'
+import type { EpisodioEnReproduccion, Suscripcion } from '../types'
 import { Icono } from './Icono'
 import { duracionEnSegundos, formatearTiempo, idiomaTipo } from '../utils'
 
 type Props = {
   contenido: Contenido
   suscripcion: Suscripcion | null
+  episodio?: EpisodioEnReproduccion | null
   onCerrar: () => void
 }
 
-export function Reproductor({ contenido, suscripcion, onCerrar }: Props) {
-  const duracion = duracionEnSegundos(contenido)
+export function Reproductor({ contenido, suscripcion, episodio, onCerrar }: Props) {
+  const duracion = episodio
+    ? episodio.episodio.duracion * 60
+    : duracionEnSegundos(contenido)
   const [pausado, setPausado] = useState(false)
   const [progreso, setProgreso] = useState(0)
   const [silenciado, setSilenciado] = useState(false)
@@ -67,14 +70,16 @@ export function Reproductor({ contenido, suscripcion, onCerrar }: Props) {
       <div className="reproductor__top">
         <button type="button" className="reproductor__volver" onClick={onCerrar}>
           <Icono nombre="flecha-izquierda" size={20} />
-          <span>Volver al catálogo</span>
+          <span>{episodio ? 'Volver a episodios' : 'Volver al catálogo'}</span>
         </button>
         <div className="reproductor__info">
           <span className="reproductor__mini-logo"><Icono nombre="filme" size={15} /> CINECOM</span>
           <div>
             <h2>{contenido.titulo}</h2>
             <p>
-              {contenido.tipo === 'serie' ? 'Temporada 1 · Episodio 1' : 'Película completa'} · {contenido.anio}
+              {episodio
+                ? `Temporada ${episodio.temporada} · Episodio ${episodio.episodio.numero} · ${episodio.episodio.titulo}`
+                : `${contenido.tipo === 'serie' ? 'Serie' : 'Película completa'} · ${contenido.anio}`}
             </p>
           </div>
         </div>
